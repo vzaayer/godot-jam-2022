@@ -11,8 +11,8 @@ func _ready():
 	$ProgressBar.max_value = health
 	$ProgressBar.value = health
 	
-	char_node = get_parent().get_node("Charachter")
-	char_node.connect("body_entered", self, "_on_Charachter_body_entered")
+	char_node = get_parent().get_node("Player")
+	#char_node.connect("body_entered", self, "_on_Charachter_body_entered")
 
 
 
