@@ -1,12 +1,34 @@
-extends RigidBody2D
+extends KinematicBody2D
+
+enum State {Walking, Dashing}
+
+var direction
+var dashTime
+var currState = State.Walking
 
 func _ready():
-	pass
+	direction = Vector2.ZERO
 
 func _physics_process(delta):
+	print(currState)
 	
-	# this is all done so diagonal movement isnt faster then vertical or horizontal
-	var direction = Vector2.ZERO
+	if currState == State.Walking:
+		if Input.is_action_just_pressed("ui_accept"):
+			print(123)
+			currState = State.Dashing
+			startDash()
+			dash(delta)
+		else:
+			walk()
+	
+	if currState == State.Dashing:
+		
+		dash(delta)
+		
+	move_and_slide(direction, Vector2.DOWN)
+	
+func walk():
+	direction = Vector2.ZERO
 	if Input.is_action_pressed("ui_left"):
 		direction.x = -1
 	if Input.is_action_pressed("ui_right"):
@@ -16,13 +38,19 @@ func _physics_process(delta):
 		direction.y = -1
 	if Input.is_action_pressed("ui_down"):
 		direction.y = 1
+	direction = direction.normalized() 
+	direction *= 300
 	
-	if direction != Vector2.ZERO:	
-		direction = direction.normalized() * 3
-	apply_central_impulse(direction)
+func dash(time):
+	dashTime += time
+	if dashTime >= .5:
+		currState = State.Walking
+		walk()
 	
-func level_up():
-	$CollisionShape2D.scale.x += .2
-	$CollisionShape2D.scale.y += .2
+func startDash():
+	direction = (get_global_mouse_position() - position).normalized() * 600
+	dashTime = 0
+	
+	
 
 	

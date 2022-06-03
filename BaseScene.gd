@@ -27,5 +27,5 @@ func _process(delta):
 			new_enemy.position.x += rng.randi_range(-20, 20)
 			new_enemy.position.y += rng.randi_range(-20, 20)
 			add_child(new_enemy)
-			$Charachter.level_up()
+
 			
